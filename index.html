@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <base target="_top">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ST-5 Mental Health Screening</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    :root{--navy:#10243a;--blue:#245b86;--teal:#14a68b;--ink:#1e2c3b;--muted:#718096;--line:#e5edf3;--bg:#f3f7fa;--white:#fff;--shadow:0 14px 40px rgba(20,48,72,.08)}
+    *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:'Prompt',sans-serif;font-size:14px}
+    button,input,select,textarea{font:inherit}button{cursor:pointer;border:0}
+    .top{background:linear-gradient(115deg,#10243a,#1b4968);color:white;padding:20px max(22px,calc((100% - 1160px)/2));display:flex;align-items:center;justify-content:space-between;gap:14px}
+    .brand{display:flex;align-items:center;gap:12px}.logo{height:46px;width:46px;border-radius:15px;background:#1e536b;display:grid;place-items:center;font-size:24px;color:#7de0c6}
+    .brand strong{font-size:17px;display:block}.brand small{color:#c5d7e5}
+    .top-actions{display:flex;gap:8px;align-items:center}.btn{padding:10px 16px;border-radius:11px;font-weight:500;transition:.2s}.btn-primary{background:var(--teal);color:white}.btn-primary:hover{filter:brightness(.95);transform:translateY(-1px)}.btn-ghost{background:rgba(255,255,255,.12);color:white}.btn-light{background:#edf4f8;color:#254763}.btn-danger{background:#fff0f0;color:#a53c46}
+    .wrap{max-width:1160px;margin:28px auto;padding:0 20px 48px}.hero{background:linear-gradient(120deg,#e6f5f3,#eaf2fa);border:1px solid #dcebe9;border-radius:22px;padding:26px 28px;margin-bottom:22px;display:flex;justify-content:space-between;gap:20px;align-items:center}
+    .eyebrow{color:#168d7c;font-size:11px;font-weight:700;letter-spacing:1.2px}.hero h1{margin:5px 0;font-size:27px;color:#163c56}.hero p{margin:0;color:#617789}.hero-icon{font-size:54px}
+    .tabs{display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap}.tab{background:white;border:1px solid var(--line);padding:10px 16px;border-radius:12px;color:#607286}.tab.active{background:var(--navy);color:white;border-color:var(--navy)}
+    .card{background:white;border:1px solid var(--line);border-radius:18px;padding:22px;box-shadow:var(--shadow);margin-bottom:18px}.card h2{font-size:18px;margin:0 0 6px;color:#183d58}.sub{color:var(--muted);margin:0 0 18px;font-size:13px}
+    .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.field label{display:block;font-size:13px;font-weight:500;margin-bottom:6px}.field input,.field select,.field textarea{width:100%;padding:11px 12px;border:1px solid #dce5ec;border-radius:10px;background:#fff;outline:none}.field input:focus,.field select:focus{border-color:#51b9a5;box-shadow:0 0 0 3px #14a68b18}
+    .notice{background:#f4f8fb;border-left:3px solid #4b92b7;padding:13px 15px;border-radius:9px;color:#536a7d;font-size:12px;line-height:1.75;margin:14px 0}
+    .question{padding:18px 0;border-bottom:1px solid var(--line)}.question:last-child{border:0}.qtitle{font-weight:500;font-size:15px;margin-bottom:13px}.qnum{display:inline-grid;place-items:center;width:28px;height:28px;border-radius:9px;background:#eaf5f3;color:#168d7c;margin-right:8px;font-weight:600}
+    .options{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px}.option{position:relative}.option input{position:absolute;opacity:0}.option label{display:flex;justify-content:center;align-items:center;text-align:center;min-height:44px;padding:8px;border:1px solid #dfe8ee;border-radius:10px;color:#647789;cursor:pointer;font-size:12px;transition:.15s}.option input:checked+label{background:#e7f7f3;border-color:#17a68b;color:#087b68;font-weight:600;box-shadow:inset 0 0 0 1px #17a68b}.option label:hover{border-color:#8acfc1}
+    .consent{display:flex;gap:10px;align-items:flex-start;margin:18px 0;color:#586c7e;font-size:12px}.consent input{margin-top:4px;accent-color:var(--teal)}.actions{display:flex;justify-content:flex-end;gap:9px;flex-wrap:wrap}
+    .result{text-align:center;padding:28px}.score{font-size:56px;font-weight:700;line-height:1.2;color:#173e5b}.pill{display:inline-block;padding:6px 13px;border-radius:30px;font-weight:600;font-size:12px}.mild{background:#e7f7ed;color:#237548}.moderate{background:#fff4dc;color:#916716}.high{background:#ffebdf;color:#a84c20}.severe{background:#fde9eb;color:#aa3544}
+    .hidden{display:none!important}.admin-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.stat{padding:17px;border-radius:15px;background:#f7fafc;border:1px solid #edf1f5}.stat small{color:#718096}.stat strong{display:block;font-size:27px;color:#173e5b;margin:5px 0}.stat span{font-size:11px;color:#718096}
+    .charts{display:grid;grid-template-columns:1fr 1fr;gap:16px}.chartbox{height:260px;position:relative}.filters{display:flex;gap:9px;flex-wrap:wrap;align-items:end}.filters .field{min-width:150px;flex:1}
+    .table-wrap{overflow:auto}table{width:100%;border-collapse:collapse;white-space:nowrap;font-size:12px}th{background:#f4f8fa;color:#607286;text-align:left;font-weight:600}th,td{padding:11px 10px;border-bottom:1px solid #edf1f4}tr:hover td{background:#fafcfd}.link{color:#168d7c;text-decoration:underline;cursor:pointer;background:none;padding:0}
+    .modal{position:fixed;inset:0;background:#0b1b2c88;display:grid;place-items:center;padding:16px;z-index:20}.modalbox{background:white;border-radius:18px;padding:22px;width:min(600px,100%);max-height:90vh;overflow:auto}.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#173e5b;color:white;padding:12px 18px;border-radius:12px;z-index:50;box-shadow:var(--shadow)}
+    .footer{text-align:center;color:#8997a4;font-size:11px;margin:24px 0}.loading{opacity:.55;pointer-events:none}
+    @media(max-width:760px){.top{padding:16px 18px}.top-actions .btn{padding:9px 10px;font-size:11px}.hero{padding:20px}.hero h1{font-size:22px}.hero-icon{font-size:38px}.grid,.charts{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,1fr)}.card{padding:17px}.options{gap:5px}.option label{font-size:10px;padding:6px 3px;min-height:48px}.wrap{margin:18px auto;padding:0 12px 32px}}
+  </style>
+</head>
+<body>
+<header class="top">
+  <div class="brand"><div class="logo">✚</div><div><strong>ST-5 HEALTH MONITOR</strong><small>ระบบคัดกรองและติดตามความเครียด</small></div></div>
+  <div class="top-actions"><button class="btn btn-ghost" onclick="showPublic()">แบบประเมิน</button><button class="btn btn-ghost" onclick="openAdmin()">เจ้าหน้าที่</button></div>
+</header>
+<main class="wrap">
+  <section class="hero"><div><div class="eyebrow">MENTAL HEALTH • SELF SCREENING</div><h1>ดูแลใจ เริ่มต้นที่การเข้าใจตัวเอง</h1><p>แบบประเมินความเครียด ST-5 สำหรับประชาชนทั่วไป</p></div><div class="hero-icon">🌿</div></section>
+
+  <section id="publicView">
+    <div class="card">
+      <h2>ข้อมูลผู้รับการประเมิน</h2><p class="sub">กรอกข้อมูลเท่าที่จำเป็น ช่องที่ไม่จำเป็นสามารถเว้นว่างได้</p>
+      <div class="grid">
+        <div class="field"><label>ชื่อ-นามสกุล (ไม่บังคับ)</label><input id="fullName" maxlength="100" placeholder="ระบุชื่อ หากประสงค์ให้เจ้าหน้าที่ติดตาม"></div>
+        <div class="field"><label>รหัสประจำตัวในระบบ (ถ้ามี)</label><input id="personId" maxlength="40" placeholder="เว้นว่างเพื่อให้ระบบสร้างรหัส"></div>
+        <div class="field"><label>อายุ (ปี) ไม่บังคับ</label><input id="age" type="number" min="1" max="120" placeholder="อายุ"></div>
+        <div class="field"><label>เพศ (ไม่บังคับ)</label><select id="sex"><option value="">ไม่ระบุ</option><option>หญิง</option><option>ชาย</option><option>ไม่ประสงค์ระบุ</option><option>อื่น ๆ</option></select></div>
+        <div class="field"><label>เบอร์ติดต่อ (ไม่บังคับ)</label><input id="phone" maxlength="30" inputmode="tel" placeholder="ระบุเฉพาะเมื่อยินยอมให้ติดต่อ"></div>
+      </div>
+      <div class="notice">ข้อมูลนี้ใช้เพื่อการประเมินและการติดตามตามวัตถุประสงค์ที่แจ้ง โปรดหลีกเลี่ยงการกรอกเลขบัตรประชาชนหรือข้อมูลที่ไม่จำเป็น การประเมินนี้เป็นการคัดกรองเบื้องต้น ไม่ใช่การวินิจฉัยโรค</div>
+    </div>
+    <div class="card">
+      <h2>แบบประเมินความเครียด ST-5</h2>
+      <p class="sub">โปรดประเมินอาการหรือความรู้สึกที่เกิดขึ้นในระยะ 2–4 สัปดาห์ที่ผ่านมา โดยเลือกคำตอบที่ตรงกับท่านมากที่สุด</p>
+      <div id="questions"></div>
+      <label class="consent"><input type="checkbox" id="consent"><span>ข้าพเจ้าได้อ่านคำชี้แจงและยินยอมให้เก็บและใช้ข้อมูลที่กรอกเพื่อวัตถุประสงค์ในการประเมินและติดตามตามที่แจ้งไว้</span></label>
+      <div class="actions"><button class="btn btn-light" onclick="resetForm()">ล้างคำตอบ</button><button class="btn btn-primary" id="submitBtn" onclick="submitForm()">ส่งแบบประเมิน <span>→</span></button></div>
+    </div>
+  </section>
+
+  <section id="resultView" class="hidden">
+    <div class="card result"><div style="font-size:38px">🌱</div><div class="eyebrow">YOUR ST-5 RESULT</div><h2>ผลการประเมินของคุณ</h2><div class="score" id="resultScore">0/15</div><div id="resultLevel" class="pill mild">เครียดน้อย</div><p id="resultText" style="max-width:620px;margin:18px auto;color:#5e7182;line-height:1.9"></p><div id="referralBox" class="notice hidden" style="text-align:left">คะแนนตั้งแต่ 8 คะแนนขึ้นไป ควรได้รับคำแนะนำและส่งต่อให้เจ้าหน้าที่สาธารณสุขเพื่อประเมินเพิ่มเติม หากต้องการปรึกษาด้านสุขภาพจิต โทรสายด่วนสุขภาพจิต 1323 ได้ตลอด 24 ชั่วโมง</div><p id="resultId" style="font-size:11px;color:#8a98a5"></p><button class="btn btn-primary" onclick="newAssessment()">กลับไปทำแบบประเมินใหม่</button></div>
+  </section>
+
+  <section id="adminView" class="hidden">
+    <div id="loginCard" class="card" style="max-width:430px;margin:30px auto">
+      <h2>เข้าสู่ระบบเจ้าหน้าที่</h2><p class="sub">สำหรับผู้ได้รับอนุญาตเท่านั้น</p>
+      <div class="field"><label>รหัสผู้ดูแลระบบ (Admin PIN)</label><input id="adminPin" type="password" autocomplete="current-password" placeholder="กรอกรหัสผู้ดูแล"></div>
+      <div class="actions" style="margin-top:14px"><button class="btn btn-primary" onclick="loginAdmin()">เข้าสู่ระบบ</button></div>
+      <p style="font-size:11px;color:#8a98a5;margin-top:15px">รหัส PIN จะแสดงใน Execution log หลังรัน setupSystem() ครั้งแรก</p>
+    </div>
+    <div id="dashboard" class="hidden">
+      <div class="admin-head" style="margin-bottom:15px"><div><div class="eyebrow">ADMINISTRATION</div><h2 style="margin:3px 0">Dashboard ภาพรวม</h2><small style="color:#7b8996">ข้อมูลจากรายการประเมินที่บันทึกใน Google Sheets</small></div><div><button class="btn btn-light" onclick="exportData()">ส่งออก CSV</button> <button class="btn btn-danger" onclick="logoutAdmin()">ออกจากระบบ</button></div></div>
+      <div class="card">
+        <div class="filters">
+          <div class="field"><label>ตั้งแต่วันที่</label><input id="filterFrom" type="date"></div>
+          <div class="field"><label>ถึงวันที่</label><input id="filterTo" type="date"></div>
+          <div class="field"><label>ระดับความเครียด</label><select id="filterLevel"><option>ทั้งหมด</option><option>เครียดน้อย</option><option>เครียดปานกลาง</option><option>เครียดมาก</option><option>เครียดมากที่สุด</option></select></div>
+          <button class="btn btn-primary" onclick="loadDashboard()">ค้นหา</button><button class="btn btn-light" onclick="clearFilters()">ล้างตัวกรอง</button>
+        </div>
+      </div>
+      <div class="stats">
+        <div class="stat"><small>รายการประเมิน</small><strong id="statTotal">0</strong><span>รายการตามตัวกรอง</span></div>
+        <div class="stat"><small>คะแนนเฉลี่ย</small><strong id="statAvg">0</strong><span>จากคะแนนเต็ม 15</span></div>
+        <div class="stat"><small>คะแนนตั้งแต่ 8 ขึ้นไป</small><strong id="statHigh">0</strong><span>ควรประเมินและติดตาม</span></div>
+        <div class="stat"><small>รายการที่ต้องติดตาม</small><strong id="statFollow">0</strong><span>ตามสถานะในระบบ</span></div>
+      </div>
+      <div class="charts" style="margin-top:16px">
+        <div class="card"><h2>สัดส่วนระดับความเครียด</h2><p class="sub">จำแนกตามคะแนน ST-5</p><div class="chartbox"><canvas id="levelChart"></canvas></div></div>
+        <div class="card"><h2>จำนวนการประเมินรายเดือน</h2><p class="sub">แนวโน้มรายการประเมิน</p><div class="chartbox"><canvas id="monthlyChart"></canvas></div></div>
+      </div>
+      <div class="card"><h2>รายการประเมินและการติดตาม</h2><p class="sub">แสดงรายการล่าสุดสูงสุด 200 รายการ คลิกดูประวัติหรือบันทึกการติดตาม</p><div class="field" style="max-width:340px;margin-bottom:12px"><input id="tableSearch" placeholder="ค้นหาชื่อ / รหัส / Assessment ID" oninput="renderTable()"></div><div class="table-wrap"><table><thead><tr><th>วันที่</th><th>ชื่อ / รหัส</th><th>คะแนน</th><th>ระดับ</th><th>ติดตาม</th><th>ดำเนินการ</th></tr></thead><tbody id="recordsBody"><tr><td colspan="6">ยังไม่มีข้อมูล</td></tr></tbody></table></div></div>
+    </div>
+  </section>
+  <div class="footer">ST-5 Screening • ใช้เพื่อคัดกรองเบื้องต้น ไม่ใช้แทนการวินิจฉัยโดยบุคลากรทางการแพทย์</div>
+</main>
+<div id="modal" class="modal hidden"><div class="modalbox"><div class="admin-head"><h2 id="modalTitle">รายละเอียด</h2><button class="btn btn-light" onclick="closeModal()">ปิด</button></div><div id="modalContent"></div></div></div>
+<div id="toast" class="toast hidden"></div>
+
+<script>
+const QUESTIONS=[
+'มีปัญหาการนอน นอนไม่หลับหรือนอนมาก',
+'มีสมาธิน้อยลง',
+'หงุดหงิด/กระวนกระวาย/ว้าวุ่นใจ',
+'รู้สึกเบื่อ เซ็ง',
+'ไม่อยากพบปะผู้คน'
+];
+const CHOICES=['แทบไม่มี','เป็นบางครั้ง','บ่อยครั้ง','เป็นประจำ'];
+let adminToken=null,records=[],levelChart=null,monthlyChart=null;
+
+function renderQuestions(){
+ document.getElementById('questions').innerHTML=QUESTIONS.map((q,i)=>`
+  <div class="question"><div class="qtitle"><span class="qnum">${i+1}</span>${q}</div>
+  <div class="options">${CHOICES.map((c,n)=>`<div class="option"><input type="radio" id="q${i}_${n}" name="q${i}" value="${n}"><label for="q${i}_${n}">${c}<br><b>${n}</b></label></div>`).join('')}</div></div>`).join('');
+}
+function showPublic(){hideViews();document.getElementById('publicView').classList.remove('hidden')}
+function openAdmin(){hideViews();document.getElementById('adminView').classList.remove('hidden')}
+function hideViews(){['publicView','resultView','adminView'].forEach(id=>document.getElementById(id).classList.add('hidden'))}
+function resetForm(){document.querySelectorAll('#questions input').forEach(x=>x.checked=false);document.getElementById('consent').checked=false}
+function newAssessment(){resetForm();hideViews();document.getElementById('publicView').classList.remove('hidden')}
+function toast(msg){const el=document.getElementById('toast');el.textContent=msg;el.classList.remove('hidden');setTimeout(()=>el.classList.add('hidden'),3000)}
+function submitForm(){
+ const answers=QUESTIONS.map((_,i)=>{const el=document.querySelector(`input[name="q${i}"]:checked`);return el?Number(el.value):null});
+ if(answers.some(v=>v===null)){toast('กรุณาตอบคำถามให้ครบทั้ง 5 ข้อ');return}
+ if(!document.getElementById('consent').checked){toast('กรุณายืนยันการยินยอมก่อนส่งข้อมูล');return}
+ const age=document.getElementById('age').value;
+ if(age && (Number(age)<1||Number(age)>120||!Number.isInteger(Number(age)))){toast('กรุณาตรวจสอบอายุ');return}
+ const payload={answers,consent:true,fullName:document.getElementById('fullName').value,personId:document.getElementById('personId').value,age,sex:document.getElementById('sex').value,phone:document.getElementById('phone').value};
+ const btn=document.getElementById('submitBtn');btn.disabled=true;btn.textContent='กำลังบันทึก...';
+ google.script.run.withSuccessHandler(showResult).withFailureHandler(e=>{btn.disabled=false;btn.innerHTML='ส่งแบบประเมิน →';toast(e.message||'ไม่สามารถบันทึกข้อมูลได้')}).submitAssessment(payload);
+}
+function showResult(r){
+ document.getElementById('submitBtn').disabled=false;document.getElementById('submitBtn').innerHTML='ส่งแบบประเมิน →';
+ hideViews();document.getElementById('resultView').classList.remove('hidden');
+ document.getElementById('resultScore').textContent=r.total+'/15';
+ const el=document.getElementById('resultLevel');el.textContent=r.level;el.className='pill '+(r.total<=4?'mild':r.total<=7?'moderate':r.total<=9?'high':'severe');
+ document.getElementById('resultText').textContent=r.recommendation;
+ document.getElementById('referralBox').classList.toggle('hidden',!r.referral);
+ document.getElementById('resultId').textContent='รหัสรายการประเมิน: '+r.assessmentId+' • รหัสประจำตัวในระบบ: '+r.personId;
+}
+
+function loginAdmin(){
+ const pin=document.getElementById('adminPin').value;if(!pin){toast('กรุณากรอกรหัสผู้ดูแล');return}
+ google.script.run.withSuccessHandler(r=>{adminToken=r.token;document.getElementById('loginCard').classList.add('hidden');document.getElementById('dashboard').classList.remove('hidden');loadDashboard();}).withFailureHandler(e=>toast(e.message||'เข้าสู่ระบบไม่สำเร็จ')).adminLogin(pin);
+}
+function logoutAdmin(){adminToken=null;document.getElementById('dashboard').classList.add('hidden');document.getElementById('loginCard').classList.remove('hidden');document.getElementById('adminPin').value='';toast('ออกจากระบบแล้ว')}
+function filters(){return {from:document.getElementById('filterFrom').value,to:document.getElementById('filterTo').value,level:document.getElementById('filterLevel').value}}
+function loadDashboard(){
+ if(!adminToken)return;
+ google.script.run.withSuccessHandler(renderDashboard).withFailureHandler(e=>{toast(e.message||'โหลดข้อมูลไม่สำเร็จ');if((e.message||'').includes('เซสชัน'))logoutAdmin()}).getDashboard(adminToken,filters());
+}
+function renderDashboard(d){
+ records=d.records||[];document.getElementById('statTotal').textContent=d.total;document.getElementById('statAvg').textContent=d.average;document.getElementById('statHigh').textContent=d.highRisk;document.getElementById('statFollow').textContent=d.followUpCount;
+ const colors=['#34a66c','#e7b64d','#e58a55','#d85b69'];
+ if(levelChart)levelChart.destroy();levelChart=new Chart(document.getElementById('levelChart'),{type:'doughnut',data:{labels:Object.keys(d.counts),datasets:[{data:Object.values(d.counts),backgroundColor:colors,borderWidth:0}]},options:{maintainAspectRatio:false,plugins:{legend:{position:'bottom'}}}});
+ if(monthlyChart)monthlyChart.destroy();monthlyChart=new Chart(document.getElementById('monthlyChart'),{type:'bar',data:{labels:d.monthly.map(x=>x.month),datasets:[{label:'รายการ',data:d.monthly.map(x=>x.count),backgroundColor:'#2a8c91',borderRadius:7}]},options:{maintainAspectRatio:false,scales:{y:{beginAtZero:true,ticks:{precision:0}}},plugins:{legend:{display:false}}}});
+ renderTable();
+}
+function renderTable(){
+ const q=(document.getElementById('tableSearch').value||'').toLowerCase();
+ const list=records.filter(r=>[r.name,r.personId,r.assessmentId].join(' ').toLowerCase().includes(q));
+ document.getElementById('recordsBody').innerHTML=list.map(r=>`<tr><td>${esc(r.date)}</td><td><b>${esc(r.name||'ไม่ระบุชื่อ')}</b><br><small>${esc(r.personId)}</small></td><td><b>${r.total}/15</b></td><td><span class="pill ${r.total<=4?'mild':r.total<=7?'moderate':r.total<=9?'high':'severe'}">${esc(r.level)}</span></td><td>${esc(r.followUpStatus||'-')}</td><td><button class="link" onclick="showHistory('${jsq(r.personId)}')">ประวัติ</button> · <button class="link" onclick="editFollow('${jsq(r.assessmentId)}')">ติดตาม</button></td></tr>`).join('')||'<tr><td colspan="6">ไม่พบข้อมูล</td></tr>';
+}
+function showHistory(personId){
+ google.script.run.withSuccessHandler(items=>{
+  document.getElementById('modalTitle').textContent='ประวัติการประเมิน: '+personId;
+  document.getElementById('modalContent').innerHTML=items.length?'<div class="table-wrap"><table><thead><tr><th>วันที่</th><th>คะแนน</th><th>ระดับ</th></tr></thead><tbody>'+items.map(x=>`<tr><td>${esc(x.date)}</td><td>${x.total}/15</td><td>${esc(x.level)}</td></tr>`).join('')+'</tbody></table></div>':'ไม่พบประวัติ';
+  document.getElementById('modal').classList.remove('hidden');
+ }).withFailureHandler(e=>toast(e.message)).getPersonHistory(adminToken,personId);
+}
+function editFollow(id){
+ const r=records.find(x=>x.assessmentId===id)||{};
+ document.getElementById('modalTitle').textContent='บันทึกการติดตาม';
+ document.getElementById('modalContent').innerHTML=`
+ <div class="field"><label>สถานะ</label><select id="fuStatus"><option>รอติดตาม</option><option>ติดต่อแล้ว</option><option>ให้คำปรึกษาแล้ว</option><option>ส่งต่อแล้ว</option><option>ติดตามไม่ได้</option><option>ปิดการติดตาม</option></select></div>
+ <div class="field" style="margin-top:10px"><label>วันที่ติดตาม</label><input id="fuDate" type="date"></div>
+ <div class="field" style="margin-top:10px"><label>ผู้รับผิดชอบ</label><input id="fuAssigned" maxlength="100" value="${esc(r.assignedTo||'')}"></div>
+ <div class="field" style="margin-top:10px"><label>บันทึกการช่วยเหลือ (ไม่ควรใส่ข้อมูลเกินจำเป็น)</label><textarea id="fuNote" rows="3">${esc(r.note||'')}</textarea></div>
+ <div class="actions" style="margin-top:15px"><button class="btn btn-primary" onclick="saveFollow('${jsq(id)}')">บันทึก</button></div>`;
+ document.getElementById('modal').classList.remove('hidden');
+}
+function saveFollow(id){
+ const u={assessmentId:id,status:document.getElementById('fuStatus').value,date:document.getElementById('fuDate').value,assignedTo:document.getElementById('fuAssigned').value,note:document.getElementById('fuNote').value};
+ google.script.run.withSuccessHandler(()=>{closeModal();toast('บันทึกการติดตามแล้ว');loadDashboard()}).withFailureHandler(e=>toast(e.message)).updateFollowUp(adminToken,u);
+}
+function exportData(){
+ google.script.run.withSuccessHandler(b64=>{const a=document.createElement('a');a.href='data:text/csv;base64,'+b64;a.download='ST5_Report.csv';a.click()}).withFailureHandler(e=>toast(e.message)).exportCsv(adminToken,filters());
+}
+function clearFilters(){['filterFrom','filterTo'].forEach(id=>document.getElementById(id).value='');document.getElementById('filterLevel').value='ทั้งหมด';loadDashboard()}
+function closeModal(){document.getElementById('modal').classList.add('hidden')}
+function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function jsq(v){return String(v??'').replace(/\\/g,'\\\\').replace(/'/g,"\\'")}
+renderQuestions();
+</script>
+</body>
+</html>
